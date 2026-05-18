@@ -1,0 +1,6 @@
+#0
+# test comma as a normal character in quotes and as a sep outside quotes
+[ "Hello, World!", 'Yes, Minister!', "Yes, Prime Minister!" ]
+
+#1
+[ "Julian Alvarez", 'Nick name: La Araña (The Spider)', 'Club: River Plate, Man City, Atletico Madrid' ]
