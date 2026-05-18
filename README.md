@@ -1,2 +1,2 @@
 # jtkit
-A java testing toolkit
+A JUnit-based toolkit for building and managing Java test cases
