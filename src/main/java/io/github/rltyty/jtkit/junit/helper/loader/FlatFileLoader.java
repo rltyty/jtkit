@@ -6,9 +6,9 @@ import java.util.Scanner;
 import io.github.rltyty.jtkit.junit.helper.parser.LineParser;
 import io.github.rltyty.jtkit.junit.helper.parser.Parser;
 
-public class LineParserLoader<T> extends TestDataLoader<T> {
+public class FlatFileLoader<T> extends TestDataLoader<T> {
 
-  public LineParserLoader(Class<T> scenarioType) {
+  public FlatFileLoader(Class<T> scenarioType) {
     super(scenarioType);
   }
 
@@ -34,10 +34,10 @@ public class LineParserLoader<T> extends TestDataLoader<T> {
             continue;
           }
           if (i != 0) {
-            System.err.println(
-                "Broken test data input for component [" + components[i].getName()
-                    + "] (index " + i + ") on line [" + parser.getLn()
-                    + "]. Stopping load. " + data.size() + " set(s) loaded.");
+            System.err.println("Broken test data input for component ["
+                + components[i].getName() + "] (index " + i + ") on line ["
+                + parser.getLn() + "]. Stopping load. " + data.size()
+                + " set(s) loaded.");
           } // else: clean EOF at first component, no more test data sets
           done = true;
           break;

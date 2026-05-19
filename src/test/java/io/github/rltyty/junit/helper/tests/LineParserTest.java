@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import io.github.rltyty.jtkit.junit.helper.BaseTest;
 import io.github.rltyty.jtkit.junit.helper.annotation.FileData;
 import io.github.rltyty.jtkit.junit.helper.annotation.ParseWith;
-import io.github.rltyty.jtkit.junit.helper.loader.LineParserLoader;
+import io.github.rltyty.jtkit.junit.helper.loader.FlatFileLoader;
 import io.github.rltyty.jtkit.junit.helper.parser.DataType;
 import io.github.rltyty.jtkit.junit.helper.parser.LineParser;
 import io.github.rltyty.jtkit.reflect.InvokePrivateHelper;
@@ -71,7 +71,7 @@ public class LineParserTest extends BaseTest {
       @ParseWith(DataType.STRING) String ln3) {
   }
 
-  @FileData(path = "LineParser2.dat", loader = LineParserLoader.class)
+  @FileData(path = "LineParser2.dat", loader = FlatFileLoader.class)
   void getNextValidLine_test_via_fileinput(Case2 c) {
     System.out.println("[" + c.ln1() + "], [" + c.ln2() + "], [" + c.ln3() + "]");
   }
@@ -82,7 +82,7 @@ public class LineParserTest extends BaseTest {
       @ParseWith(DataType.BOOLEAN) Boolean I3) {
   }
 
-  @FileData(path = "LineParser3.dat", loader = LineParserLoader.class)
+  @FileData(path = "LineParser3.dat", loader = FlatFileLoader.class)
   void getSingle_test_via_fileinput(Case3 c) {
     System.out.println("[" + c.I1 + "], [" + c.I2 + "], [" + c.I3 + "]");
   }
@@ -92,7 +92,7 @@ public class LineParserTest extends BaseTest {
       @ParseWith(DataType.LIST_INTEGER) List<Integer> I2) {
   }
 
-  @FileData(path = "LineParser4.dat", loader = LineParserLoader.class)
+  @FileData(path = "LineParser4.dat", loader = FlatFileLoader.class)
   void getList_test_via_fileinput(Case4 c) {
     System.out.println("[" + c.I1 + "], [" + c.I2 + "]");
   }
@@ -102,7 +102,7 @@ public class LineParserTest extends BaseTest {
       @ParseWith(DataType.LIST_2D_STRING) List<List<String>> I2) {
   }
 
-  @FileData(path = "LineParser5.dat", loader = LineParserLoader.class)
+  @FileData(path = "LineParser5.dat", loader = FlatFileLoader.class)
   void getList2D_test_via_fileinput(Case5 c) {
     System.out.println("[" + c.I1 + "], [" + c.I2 + "]");
   }
@@ -111,7 +111,7 @@ public class LineParserTest extends BaseTest {
       @ParseWith(DataType.LIST_STRING) List<String> I1) {
   }
 
-  @FileData(path = "LineParser6.dat", loader = LineParserLoader.class)
+  @FileData(path = "LineParser6.dat", loader = FlatFileLoader.class)
   void getList_test_comma_sep(Case6 c) {
     System.out.println(c.I1);
   }
