@@ -5,12 +5,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
-import io.github.rltyty.jtkit.junit.helper.extension.InputCaptor;
+import io.github.rltyty.jtkit.junit.helper.extension.TestCaseCaptor;
 import io.github.rltyty.jtkit.junit.helper.extension.TimerExtension;
-import io.github.rltyty.jtkit.junit.helper.parser.TestInput;
+import io.github.rltyty.jtkit.junit.helper.parser.Scenario;
 
 @ExtendWith(TimerExtension.class)
-@ExtendWith(InputCaptor.class)
+@ExtendWith(TestCaseCaptor.class)
 public abstract class BaseTest {
   // Verbose mode
   private static final boolean VERBOSE = Boolean.getBoolean("test.verbose");
@@ -45,9 +45,9 @@ public abstract class BaseTest {
     // System.out.println("BaseTest: Global clean work.");
   }
 
-  // call this at the start of every test to register current input
-  protected void captureInput(TestInput input) {
-    InputCaptor.store(input.inputToString());
+  // call this at the start of every test to register current test case
+  protected void captureTestCase(Scenario scenario) {
+    TestCaseCaptor.store(scenario.toStr());
   }
 
 }

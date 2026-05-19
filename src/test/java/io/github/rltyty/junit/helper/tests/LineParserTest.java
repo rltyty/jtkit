@@ -30,89 +30,89 @@ public class LineParserTest extends BaseTest {
     assertEquals(expected, InvokePrivateHelper.invokePrivate(parser, "preProcessLine", input));
   }
 
-  record Input(String expected, String input) {
+  record Case(String expected, String input) {
   }
 
-  static Stream<Input> cases() {
+  static Stream<Case> cases() {
     return Stream.of(
-        new Input("abc", " abc  "),
-        new Input("abc", "abc"),
-        new Input("abc", "abc # comment "),
-        new Input("a", "a#"),
-        new Input("", ""),
-        new Input("", "   "),
-        new Input("", "# comment  "),
-        new Input("", "  #   "),
-        new Input("", " #"),
-        new Input("", " #  #"),
-        new Input("\"  #  \"", "  \"  #  \"  #  tailing comment "),
-        new Input("'abcd'", "'abcd'"),
-        new Input("\'abc\'", "\'abc\'"),
-        new Input("\'  #  #  \'", "\'  #  #  \'"),
-        new Input("\'  #  #  \'", "\'  #  #  \' # tailing comment"),
-        new Input("a", " a # tailing comment"),
-        new Input("[1, 2, 3]", "  [1, 2, 3]  # tailing comment"),
-        new Input("[1,   2, 3]", "  [1,   2, 3]  # tailing comment"),
-        new Input("[[1,2],[3,4]]", " [[1,2],[3,4]] # tailing comment"),
-        new Input("[[\"a\",\"b\"],[\"c\"]]", "    [[\"a\",\"b\"],[\"c\"]] # a"),
-        new Input("\\\\\' abc\'", "\\\\\' abc\' # comment "));
+        new Case("abc", " abc  "),
+        new Case("abc", "abc"),
+        new Case("abc", "abc # comment "),
+        new Case("a", "a#"),
+        new Case("", ""),
+        new Case("", "   "),
+        new Case("", "# comment  "),
+        new Case("", "  #   "),
+        new Case("", " #"),
+        new Case("", " #  #"),
+        new Case("\"  #  \"", "  \"  #  \"  #  tailing comment "),
+        new Case("'abcd'", "'abcd'"),
+        new Case("\'abc\'", "\'abc\'"),
+        new Case("\'  #  #  \'", "\'  #  #  \'"),
+        new Case("\'  #  #  \'", "\'  #  #  \' # tailing comment"),
+        new Case("a", " a # tailing comment"),
+        new Case("[1, 2, 3]", "  [1, 2, 3]  # tailing comment"),
+        new Case("[1,   2, 3]", "  [1,   2, 3]  # tailing comment"),
+        new Case("[[1,2],[3,4]]", " [[1,2],[3,4]] # tailing comment"),
+        new Case("[[\"a\",\"b\"],[\"c\"]]", "    [[\"a\",\"b\"],[\"c\"]] # a"),
+        new Case("\\\\\' abc\'", "\\\\\' abc\' # comment "));
   }
 
   @ParameterizedTest
   @MethodSource("cases")
-  void preProcessLine_test_via_MethodSource(Input c) {
+  void preProcessLine_test_via_MethodSource(Case c) {
     LineParser parser = new LineParser();
     assertEquals(c.expected, InvokePrivateHelper.invokePrivate(parser, "preProcessLine", c.input));
   }
 
-  public record Input2(
+  public record Case2(
       @ParseWith(DataType.STRING) String ln1,
       @ParseWith(DataType.STRING) String ln2,
       @ParseWith(DataType.STRING) String ln3) {
   }
 
-  @FileData(type = Input2.class, path = "LineParser2.dat", loader = LineParserLoader.class)
-  void getNextValidLine_test_via_fileinput(Input2 c) {
+  @FileData(path = "LineParser2.dat", loader = LineParserLoader.class)
+  void getNextValidLine_test_via_fileinput(Case2 c) {
     System.out.println("[" + c.ln1() + "], [" + c.ln2() + "], [" + c.ln3() + "]");
   }
 
-  public record Input3(
+  public record Case3(
       @ParseWith(DataType.INTEGER) Integer I1,
       @ParseWith(DataType.DOUBLE) Double I2,
       @ParseWith(DataType.BOOLEAN) Boolean I3) {
   }
 
-  @FileData(type = Input3.class, path = "LineParser3.dat", loader = LineParserLoader.class)
-  void getSingle_test_via_fileinput(Input3 c) {
+  @FileData(path = "LineParser3.dat", loader = LineParserLoader.class)
+  void getSingle_test_via_fileinput(Case3 c) {
     System.out.println("[" + c.I1 + "], [" + c.I2 + "], [" + c.I3 + "]");
   }
 
-  public record Input4(
+  public record Case4(
       @ParseWith(DataType.STRING) String I1,
       @ParseWith(DataType.LIST_INTEGER) List<Integer> I2) {
   }
 
-  @FileData(type = Input4.class, path = "LineParser4.dat", loader = LineParserLoader.class)
-  void getList_test_via_fileinput(Input4 c) {
+  @FileData(path = "LineParser4.dat", loader = LineParserLoader.class)
+  void getList_test_via_fileinput(Case4 c) {
     System.out.println("[" + c.I1 + "], [" + c.I2 + "]");
   }
 
-  public record Input5(
+  public record Case5(
       @ParseWith(DataType.STRING) String I1,
       @ParseWith(DataType.LIST_2D_STRING) List<List<String>> I2) {
   }
 
-  @FileData(type = Input5.class, path = "LineParser5.dat", loader = LineParserLoader.class)
-  void getList2D_test_via_fileinput(Input5 c) {
+  @FileData(path = "LineParser5.dat", loader = LineParserLoader.class)
+  void getList2D_test_via_fileinput(Case5 c) {
     System.out.println("[" + c.I1 + "], [" + c.I2 + "]");
   }
 
-  public record  Input6(
+  public record  Case6(
       @ParseWith(DataType.LIST_STRING) List<String> I1) {
   }
 
-  @FileData(type = Input6.class, path = "LineParser6.dat", loader = LineParserLoader.class)
-  void getList_test_comma_sep(Input6 c) {
+  @FileData(path = "LineParser6.dat", loader = LineParserLoader.class)
+  void getList_test_comma_sep(Case6 c) {
     System.out.println(c.I1);
   }
 

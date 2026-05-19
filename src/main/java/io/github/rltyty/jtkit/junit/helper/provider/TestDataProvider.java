@@ -18,19 +18,23 @@ public class TestDataProvider implements ArgumentsProvider {
     FileData data = ctx.getTestMethod()
         .flatMap(m -> Optional.ofNullable(m.getAnnotation(FileData.class)))
         .orElseThrow(() -> new IllegalArgumentException("Missing @TestData annotation"));
+    // extract type from the first parameter of the test method
+    Class<?> scenarioType = ctx.getRequiredTestMethod().getParameterTypes()[0];
+    // used to locate test data source related to the test class
     Class<?> testClass = ctx.getRequiredTestClass();
     try {
-      return loadData(data, testClass).stream().map(Arguments::of);
+      return loadData(data, scenarioType, testClass).stream()
+          .map(Arguments::of);
     } catch (Exception e) {
       throw new RuntimeException("Failed to load test data for: " + data.path(), e);
     }
   }
 
   @SuppressWarnings("unchecked")
-  private <T> List<T> loadData(FileData data, Class<?> testClass) throws Exception {
+  private <T> List<T> loadData(FileData data, Class<?> scenarioType,
+      Class<?> testClass) throws Exception {
     TestDataLoader<T> loader = (TestDataLoader<T>) data.loader()
-        .getDeclaredConstructor(Class.class)
-        .newInstance(data.type());
+        .getDeclaredConstructor(Class.class).newInstance(scenarioType);
     return loader.load(data.path(), testClass);
   }
 

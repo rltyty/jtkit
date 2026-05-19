@@ -3,21 +3,21 @@ package io.github.rltyty.jtkit.junit.helper.extension;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
 
-public class InputCaptor implements TestExecutionExceptionHandler {
+public class TestCaseCaptor implements TestExecutionExceptionHandler {
 
-  private static final ThreadLocal<Object> CURRENT_INPUT = new ThreadLocal<>();
+  private static final ThreadLocal<Object> CURRENT_DATA = new ThreadLocal<>();
 
-  public static void store(Object input) {
-    CURRENT_INPUT.set(input);
+  public static void store(Object data) {
+    CURRENT_DATA.set(data);
   }
 
   @Override
   public void handleTestExecutionException(ExtensionContext ctx, Throwable t)
       throws Throwable {
-    Object input = CURRENT_INPUT.get();
-    if (input != null) {
+    Object data = CURRENT_DATA.get();
+    if (data != null) {
       throw new RuntimeException(
-          "Exception on input: [" + input + "]", t);
+          "Exception on input: [" + data + "]", t);
     }
     throw t; // no input captured, rethrow as-is
   }

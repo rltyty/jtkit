@@ -14,11 +14,9 @@ import io.github.rltyty.jtkit.junit.helper.provider.TestDataProvider;
 @ParameterizedTest(name = "{displayName} [{index}]")
 @ArgumentsSource(TestDataProvider.class)
 public @interface FileData {
-  Class<?> type(); // record/class to load
-
   String path(); // file path
 
   @SuppressWarnings("rawtypes")
   Class<? extends TestDataLoader> loader(); // annotation elements cannot be
-                                            // parameterized
+                                            // generic type parameterized
 }

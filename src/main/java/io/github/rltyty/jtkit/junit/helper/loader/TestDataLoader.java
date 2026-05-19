@@ -14,11 +14,11 @@ public abstract class TestDataLoader<T> {
   RecordComponent[] components;
 
   @SuppressWarnings("unchecked")
-  public TestDataLoader(Class<T> inputType) {
-    this.ctor = (Constructor<T>) inputType.getDeclaredConstructors()[0];
+  public TestDataLoader(Class<T> scenarioType) {
+    this.ctor = (Constructor<T>) scenarioType.getDeclaredConstructors()[0];
     this.data = new ArrayList<>();
 
-    this.components = inputType.getRecordComponents();
+    this.components = scenarioType.getRecordComponents();
     this.argTypes = new ParseWith[components.length];
     for (int i = 0; i < components.length; i++) {
       ParseWith ann = components[i].getAnnotation(ParseWith.class);
