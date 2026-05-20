@@ -5,11 +5,34 @@
 
   <groupId>io.github.rltyty</groupId>
   <artifactId>jtkit</artifactId>
-  <version>1.0.0</version>
+  <version>0.5.0</version>
   <packaging>jar</packaging>
 
   <name>jtkit</name>
+  <description>A JUnit-based test helper toolkit</description>
   <url>https://github.com/rltyty/jtkit</url>
+
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>rltyty</id>
+      <name>rltyty</name>
+      <email>except10n.rlt@gmail.com</email>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:https://github.com/rltyty/jtkit.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:rltyty/jtkit.git</developerConnection>
+    <url> https://github.com/rltyty/jtkit </url>
+    <tag>HEAD</tag>
+  </scm>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -69,6 +92,9 @@
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
           <version>3.1.2</version>
+          <configuration>
+            <skip>true</skip>
+          </configuration>
         </plugin>
         <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
         <plugin>
@@ -81,5 +107,66 @@
         </plugin>
       </plugins>
     </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>3.2.7</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals><goal>sign</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.3.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals><goal>jar-no-fork</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.11.2</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals><goal>jar</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
+        <version>0.7.0</version>
+        <extensions>true</extensions>
+
+        <configuration>
+          <publishingServerId>central</publishingServerId>
+          <autoPublish>true</autoPublish>
+          <waitUntil>published</waitUntil>
+        </configuration>
+
+        <executions>
+          <execution>
+            <id>publish-to-central</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>publish</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+
   </build>
+
 </project>
