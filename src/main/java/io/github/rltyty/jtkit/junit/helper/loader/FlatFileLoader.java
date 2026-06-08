@@ -1,6 +1,7 @@
 package io.github.rltyty.jtkit.junit.helper.loader;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import io.github.rltyty.jtkit.junit.helper.parser.LineParser;
@@ -19,6 +20,7 @@ public class FlatFileLoader<T> extends TestDataLoader<T> {
     if (is == null) {
       throw new IllegalArgumentException("Resource not found: " + fullPath);
     }
+    List<T> data = new ArrayList<>();
 
     try (Scanner sc = new Scanner(is)) {
       LineParser parser = new LineParser(sc);

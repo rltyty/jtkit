@@ -31,5 +31,5 @@ public interface Scenario {
     if (value instanceof char[]   v) return Arrays.toString(v);
     if (value instanceof Object[] v) return Arrays.deepToString(v);
     return String.valueOf(value);
-}
+  }
 }
