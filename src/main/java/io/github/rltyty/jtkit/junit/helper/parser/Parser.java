@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026-present RLTYTY
+ * Licensed under the MIT License.
+ */
+
 package io.github.rltyty.jtkit.junit.helper.parser;
 
 import java.util.ArrayList;
@@ -7,31 +12,86 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * getList2D → getList → getSingle → LOW_PARSERS
+ * Abstract base class for parsing test data values from string input.
+ *
+ * <p>Parsing is structured in three layers:
+ * <ol>
+ *   <li>{@code HIGH_PARSERS} — dispatches by {@link DataType.Arity} to the
+ *       appropriate abstract method.</li>
+ *   <li>Abstract methods ({@code getSingle}, {@code getList}, etc.) —
+ *       implemented by subclasses to supply the raw string per call.</li>
+ *   <li>{@code LOW_PARSERS} — converts a single string token to a typed value.</li>
+ * </ol>
+ *                    getList2D
+ *              /                   \
+ * HIGH_PARSERS ———————————————————— getList
+ *             |\                   /       \
+ *             | \ getPrimitiveArray         \
+ *             |                              \
+ *             ———————————————————————————————  getSingle → LOW_PARSERS
  */
 public abstract class Parser {
 
-  /**
-   * public members
-   */
-  public static Map<DataType.Arity, BiFunction<Parser, Class<?>, Object>> HIGH_PARSERS = Map.of(
-      DataType.Arity.SINGLE, (parser, clazz) -> parser.getSingle(clazz),
-      DataType.Arity.LIST, (parser, clazz) -> parser.getList(clazz),
-      DataType.Arity.LIST_2D, (parser, clazz) -> parser.getList2D(clazz),
-      DataType.Arity.ARRAY, (parser, clazz) -> parser.getPrimitiveArray(clazz));
+  /** Default no-arg constructor for subclasses. */
+  protected Parser() {}
 
+  /**
+   * Dispatches parsing to the appropriate method based on {@link DataType.Arity}.
+   * Maps each arity to a {@link java.util.function.BiFunction} that invokes
+   * the corresponding abstract method on the parser instance.
+   */
+  public static final Map<DataType.Arity, BiFunction<Parser, Class<?>, Object>> HIGH_PARSERS =
+      Map.of(
+          DataType.Arity.SINGLE, (parser, clazz) -> parser.getSingle(clazz),
+          DataType.Arity.LIST, (parser, clazz) -> parser.getList(clazz),
+          DataType.Arity.LIST_2D, (parser, clazz) -> parser.getList2D(clazz),
+          DataType.Arity.ARRAY, (parser, clazz) -> parser.getPrimitiveArray(clazz));
+
+  /**
+   * Reads and returns a single value of type {@code T} from the input source.
+   *
+   * @param <T> the target type
+   * @param t   the class of the target type
+   * @return the parsed value, or {@code null} if input is exhausted or unparseable
+   */
   public abstract <T> T getSingle(Class<T> t);
 
+  /**
+   * Reads and returns a flat list of type {@code T} from the input source.
+   *
+   * @param <T> the element type
+   * @param t   the class of the element type
+   * @return the parsed list, or {@code null} if input is exhausted or unparseable
+   */
   public abstract <T> List<T> getList(Class<T> t);
 
+  /**
+   * Reads and returns a 2D list of type {@code T} from the input source.
+   *
+   * @param <T> the element type
+   * @param t   the class of the element type
+   * @return the parsed 2D list, or {@code null} if input is exhausted or unparseable
+   */
   public abstract <T> List<List<T>> getList2D(Class<T> t);
 
+  /**
+   * Reads and returns a primitive array from the input source.
+   * The returned type {@code T} is a primitive array (e.g. {@code int[]}).
+   *
+   * @param <T>           the primitive array type
+   * @param primitiveType the primitive component class (e.g. {@code int.class})
+   * @return the parsed array, or {@code null} if input is exhausted or unparseable
+   */
   public abstract <T> T getPrimitiveArray(Class<?> primitiveType);
 
   /**
-   * protected members
+   * Parses a primitive array from the raw string {@code s}.
+   *
+   * @param <T>           the primitive array type
+   * @param s             the raw input string
+   * @param primitiveType the primitive component class (e.g. {@code int.class})
+   * @return the parsed array, or {@code null} if unparseable
    */
-
   @SuppressWarnings("unchecked")
   protected static <T> T getPrimitiveArray(String s, Class<?> primitiveType) {
     Class<?> boxed = PRIMITIVE_TO_BOXED.get(primitiveType);
@@ -47,6 +107,14 @@ public abstract class Parser {
     return (T) converter.apply(list);
   }
 
+  /**
+   * Parses a 2D list of type {@code T} from the raw string {@code s}.
+   *
+   * @param <E> the element type
+   * @param s   the raw input string
+   * @param t   the class of the element type
+   * @return the parsed 2D list, or {@code null} if unparseable
+   */
   protected static <E> List<List<E>> getList2D(String s, Class<E> t) {
     try {
       String content = stripBrackets(s);
@@ -70,6 +138,14 @@ public abstract class Parser {
 
   }
 
+  /**
+   * Parses a flat list of type {@code T} from the raw string {@code s}.
+   *
+   * @param <E> the element type
+   * @param s   the raw input string
+   * @param t   the class of the element type
+   * @return the parsed list, or {@code null} if unparseable
+   */
   protected static <E> List<E> getList(String s, Class<E> t) {
     try {
       String content = stripBrackets(s);
@@ -92,6 +168,14 @@ public abstract class Parser {
     }
   }
 
+  /**
+   * Parses a single value of type {@code T} from the raw string {@code s}.
+   *
+   * @param <T> the target type
+   * @param s   the raw input string
+   * @param t   the class of the target type
+   * @return the parsed value, or {@code null} if unparseable
+   */
   protected static <T> T getSingle(String s, Class<T> t) {
     Function<String, Object> func = LOW_PARSERS.get(t);
     if (func == null) {
@@ -108,9 +192,6 @@ public abstract class Parser {
     return obj;
   }
 
-  /**
-   * private members
-   */
   private static final Map<Class<?>, Class<?>> PRIMITIVE_TO_BOXED = Map.of(
       boolean.class, Boolean.class,
       byte.class, Byte.class,
@@ -242,8 +323,8 @@ public abstract class Parser {
   private static Character str2Char(String s) {
     String trimmed = stripQuotes(s);
     if (trimmed.length() != 1) {
-      System.err.println("Expected single character but got : ["
-          + trimmed + "].");
+      throw new IllegalArgumentException(
+          "Expected single character but got: [" + trimmed + "]");
     }
     return trimmed.charAt(0);
   }

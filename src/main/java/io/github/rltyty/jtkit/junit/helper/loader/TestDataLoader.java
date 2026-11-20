@@ -1,29 +1,39 @@
+/*
+ * Copyright (c) 2026-present RLTYTY
+ * Licensed under the MIT License.
+ */
+
 package io.github.rltyty.jtkit.junit.helper.loader;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.RecordComponent;
 import java.util.List;
-import io.github.rltyty.jtkit.junit.helper.annotation.ParseWith;
+import io.github.rltyty.jtkit.junit.helper.parser.Scenario;
 
-public abstract class TestDataLoader<T> {
+/**
+ * Abstract base class for loading test data from external sources.
+ *
+ * @param <T> the {@link Scenario} type this loader produces
+ */
+public abstract class TestDataLoader<T extends Scenario> {
 
-  protected final Constructor<T> ctor;
-  protected final ParseWith[] argTypes;
-  protected final RecordComponent[] components;
+  /** The scenario record class this loader produces. */
+  protected final Class<T> scenarioType;
 
-  @SuppressWarnings("unchecked")
+  /**
+   * Constructs a loader for the given scenario type.
+   *
+   * @param scenarioType the class of the scenario record to load
+   */
   public TestDataLoader(Class<T> scenarioType) {
-    this.ctor = (Constructor<T>) scenarioType.getDeclaredConstructors()[0];
-    this.components = scenarioType.getRecordComponents();
-    this.argTypes = new ParseWith[components.length];
-    for (int i = 0; i < components.length; i++) {
-      ParseWith ann = components[i].getAnnotation(ParseWith.class);
-      if (ann == null)
-        throw new IllegalStateException(
-            "Record component '" + components[i].getName() + "' missing @ParseWith");
-      this.argTypes[i] = ann;
-    }
+    this.scenarioType = scenarioType;
   }
 
-  public abstract List<T> load(String path, Class<?> testClass) throws Exception;
+  /**
+   * Loads all test scenarios from the given path, resolved relative to
+   * {@code testClass}'s package on the classpath.
+   *
+   * @param path      the resource path, relative to the test class's package
+   * @param testClass the test class used to locate the resource
+   * @return a list of loaded scenarios
+   */
+  public abstract List<T> load(String path, Class<?> testClass);
 }

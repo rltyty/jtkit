@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026-present RLTYTY
+ * Licensed under the MIT License.
+ */
+
 package io.github.rltyty.junit.helper.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

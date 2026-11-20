@@ -5,11 +5,12 @@
 
   <groupId>io.github.rltyty</groupId>
   <artifactId>jtkit</artifactId>
-  <version>0.6.1-SNAPSHOT</version>
+  <version>0.7.0</version>
   <packaging>jar</packaging>
 
   <name>jtkit</name>
-  <description>A JUnit-based test helper toolkit</description>
+  <description>A JUnit 5+ testing toolkit that simplifies test data loading
+  and test case setup through declarative annotations.</description>
   <url>https://github.com/rltyty/jtkit</url>
 
   <licenses>

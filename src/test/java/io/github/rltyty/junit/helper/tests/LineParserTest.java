@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026-present RLTYTY
+ * Licensed under the MIT License.
+ */
+
 package io.github.rltyty.junit.helper.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,6 +17,7 @@ import io.github.rltyty.jtkit.junit.helper.annotation.ParseWith;
 import io.github.rltyty.jtkit.junit.helper.loader.FlatFileLoader;
 import io.github.rltyty.jtkit.junit.helper.parser.DataType;
 import io.github.rltyty.jtkit.junit.helper.parser.LineParser;
+import io.github.rltyty.jtkit.junit.helper.parser.Scenario;
 import io.github.rltyty.jtkit.reflect.InvokePrivateHelper;
 
 public class LineParserTest extends BaseTest {
@@ -65,11 +71,11 @@ public class LineParserTest extends BaseTest {
     assertEquals(c.expected, InvokePrivateHelper.invokePrivate(parser, "preProcessLine", c.input));
   }
 
-  public record Case2(
+  public record Case2 (
       @ParseWith(DataType.STRING) String ln1,
       @ParseWith(DataType.STRING) String ln2,
-      @ParseWith(DataType.STRING) String ln3) {
-  }
+      @ParseWith(DataType.STRING) String ln3)
+      implements Scenario {}
 
   @FileData(path = "LineParser2.dat", loader = FlatFileLoader.class)
   void getNextValidLine_test_via_fileinput(Case2 c) {
@@ -79,8 +85,8 @@ public class LineParserTest extends BaseTest {
   public record Case3(
       @ParseWith(DataType.INTEGER) Integer I1,
       @ParseWith(DataType.DOUBLE) Double I2,
-      @ParseWith(DataType.BOOLEAN) Boolean I3) {
-  }
+      @ParseWith(DataType.BOOLEAN) Boolean I3)
+      implements Scenario {}
 
   @FileData(path = "LineParser3.dat", loader = FlatFileLoader.class)
   void getSingle_test_via_fileinput(Case3 c) {
@@ -89,8 +95,8 @@ public class LineParserTest extends BaseTest {
 
   public record Case4(
       @ParseWith(DataType.STRING) String I1,
-      @ParseWith(DataType.LIST_INTEGER) List<Integer> I2) {
-  }
+      @ParseWith(DataType.LIST_INTEGER) List<Integer> I2)
+      implements Scenario {}
 
   @FileData(path = "LineParser4.dat", loader = FlatFileLoader.class)
   void getList_test_via_fileinput(Case4 c) {
@@ -99,8 +105,8 @@ public class LineParserTest extends BaseTest {
 
   public record Case5(
       @ParseWith(DataType.STRING) String I1,
-      @ParseWith(DataType.LIST_2D_STRING) List<List<String>> I2) {
-  }
+      @ParseWith(DataType.LIST_2D_STRING) List<List<String>> I2)
+      implements Scenario {}
 
   @FileData(path = "LineParser5.dat", loader = FlatFileLoader.class)
   void getList2D_test_via_fileinput(Case5 c) {
@@ -108,8 +114,8 @@ public class LineParserTest extends BaseTest {
   }
 
   public record  Case6(
-      @ParseWith(DataType.LIST_STRING) List<String> I1) {
-  }
+      @ParseWith(DataType.LIST_STRING) List<String> I1)
+      implements Scenario {}
 
   @FileData(path = "LineParser6.dat", loader = FlatFileLoader.class)
   void getList_test_comma_sep(Case6 c) {

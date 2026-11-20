@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026-present RLTYTY
+ * Licensed under the MIT License.
+ */
+
 package io.github.rltyty.jtkit.junit.helper.extension;
 
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
@@ -5,8 +10,15 @@ import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import io.github.rltyty.jtkit.junit.helper.TestUtils;
 
+/**
+ * JUnit extension that measures and prints per-test execution time.
+ * Activated via the {@code -Dtest.timer.enabled=true} system property.
+ */
 public class TimerExtension implements BeforeTestExecutionCallback,
     AfterTestExecutionCallback {
+
+  /** Creates a new instance. */
+  public TimerExtension() {}
 
   private static final String START_TIME = "start time";
   private static final String TIMER_ENABLED_PROP = "test.timer.enabled";
@@ -16,6 +28,11 @@ public class TimerExtension implements BeforeTestExecutionCallback,
     return TIMER_ENABLED;
   }
 
+  /**
+   * Records the test start time in the extension store if the timer is enabled.
+   *
+   * @param context the current extension context
+   */
   @Override
   public void beforeTestExecution(ExtensionContext context) throws Exception {
     if (isTimerEnabled())
@@ -23,6 +40,12 @@ public class TimerExtension implements BeforeTestExecutionCallback,
           .put(START_TIME, System.nanoTime());
   }
 
+  /**
+   * Computes and prints the elapsed time since {@link #beforeTestExecution}
+   * if the timer is enabled.
+   *
+   * @param context the current extension context
+   */
   @Override
   public void afterTestExecution(ExtensionContext context) throws Exception {
     if (isTimerEnabled()) {

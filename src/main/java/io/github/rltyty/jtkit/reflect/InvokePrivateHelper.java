@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026-present RLTYTY
+ * Licensed under the MIT License.
+ */
+
 package io.github.rltyty.jtkit.reflect;
 
 import java.lang.reflect.Method;
@@ -5,7 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Utility for invoking private methods via reflection, primarily to support
+ * unit testing of private implementation details.
+ *
+ * <p>Not instantiable.
+ */
 public class InvokePrivateHelper {
+
+  /** Utility class; not instantiable. */
+  private InvokePrivateHelper() {}
 
   private static final Map<Class<?>, Class<?>> PRIMITIVE_TO_WRAPPER = Map.of(
       boolean.class, Boolean.class,
@@ -24,20 +38,66 @@ public class InvokePrivateHelper {
   private static final int NULL_MATCH = 40;
   private static final int NOT_MATCH = -1;
 
+  /**
+   * Invokes a private instance method on {@code target} by name,
+   * matching on argument types at runtime.
+   *
+   * @param <T>        the return type
+   * @param target     the object on which to invoke the method
+   * @param methodName the name of the private method
+   * @param args       the arguments to pass
+   * @return the method's return value, cast to {@code T}
+   * @throws RuntimeException if the method cannot be found or invoked
+   */
   public static <T> T invokePrivate(Object target, String methodName, Object... args) {
     return __invokePrivate(target, null, methodName, null, args);
   }
 
+  /**
+   * Invokes a private instance method on {@code target} by name,
+   * matching on the explicitly supplied parameter types.
+   *
+   * @param <T>        the return type
+   * @param target     the object on which to invoke the method
+   * @param methodName the name of the private method
+   * @param paramTypes the exact parameter types for method lookup
+   * @param args       the arguments to pass
+   * @return the method's return value, cast to {@code T}
+   * @throws RuntimeException if the method cannot be found or invoked
+   */
   public static <T> T invokePrivate(
       Object target, String methodName, Class<?>[] paramTypes, Object... args) {
     return __invokePrivate(target, null, methodName, paramTypes, args);
   }
 
+  /**
+   * Invokes a private static method on {@code clazz} by name,
+   * matching on argument types at runtime.
+   *
+   * @param <T>        the return type
+   * @param clazz      the class declaring the private static method
+   * @param methodName the name of the private static method
+   * @param args       the arguments to pass
+   * @return the method's return value, cast to {@code T}
+   * @throws RuntimeException if the method cannot be found or invoked
+   */
   public static <T> T invokeStaticPrivate(
       Class<?> clazz, String methodName, Object... args) {
     return __invokePrivate(null, clazz, methodName, null, args);
   }
 
+  /**
+   * Invokes a private static method on {@code clazz} by name,
+   * matching on the explicitly supplied parameter types.
+   *
+   * @param <T>        the return type
+   * @param clazz      the class declaring the private static method
+   * @param methodName the name of the private static method
+   * @param paramTypes the exact parameter types for method lookup
+   * @param args       the arguments to pass
+   * @return the method's return value, cast to {@code T}
+   * @throws RuntimeException if the method cannot be found or invoked
+   */
   public static <T> T invokeStaticPrivate(
       Class<?> clazz, String methodName, Class<?>[] paramTypes,
       Object... args) {

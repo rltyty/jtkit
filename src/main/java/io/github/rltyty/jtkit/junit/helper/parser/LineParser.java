@@ -1,21 +1,44 @@
+/*
+ * Copyright (c) 2026-present RLTYTY
+ * Licensed under the MIT License.
+ */
+
 package io.github.rltyty.jtkit.junit.helper.parser;
 
 import java.text.ParseException;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * A {@link Parser} implementation that reads one value per line from a
+ * {@link Scanner}.
+ *
+ * <p>Lines beginning with {@code #} (outside of string literals) are treated
+ * as comments and skipped. Blank lines are also skipped. String values must
+ * be enclosed in single or double quotes.
+ */
 public class LineParser extends Parser {
   private Scanner scanner = null;
   private int ln = 0;
 
-  public LineParser() {
-  }
+  /** For unit testing Parser methods directly. */
+  public LineParser() {}
 
+  /**
+   * Constructs a {@code LineParser} that reads from the given scanner.
+   *
+   * @param scanner the scanner to read lines from
+   */
   public LineParser(Scanner scanner) {
     this.scanner = scanner;
     this.ln = 0;
   }
 
+  /**
+   * Returns the current line number (1-based), useful for error reporting.
+   *
+   * @return the number of lines consumed so far
+   */
   public int getLn() {
     return ln;
   }
@@ -76,6 +99,14 @@ public class LineParser extends Parser {
     return arr;
   }
 
+  /**
+   * Advances to the next non-blank, non-comment line and returns it,
+   * or {@code null} if the input is exhausted.
+   *
+   * @return the next valid line, or {@code null}
+   * @throws ParseException if an unterminated string literal or trailing
+   *                        escape character is detected
+   */
   public String getNextValidLine() throws ParseException {
     while (scanner.hasNextLine()) {
       ln++;

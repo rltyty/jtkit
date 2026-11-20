@@ -1,5 +1,17 @@
+/*
+ * Copyright (c) 2026-present RLTYTY
+ * Licensed under the MIT License.
+ */
+
 package io.github.rltyty.jtkit.junit.helper.parser;
 
+/**
+ * Enumeration of supported test data types, covering scalars, lists, 2D lists,
+ * and primitive arrays for all primitive wrapper types and {@link String}.
+ *
+ * <p>Each constant carries its {@link Arity} (how many lines / bracket levels
+ * it occupies) and the corresponding Java class used during parsing.
+ */
 public enum DataType {
   BOOLEAN           (Arity.SINGLE,    Boolean.class),
   BYTE              (Arity.SINGLE,    Byte.class),
@@ -43,11 +55,24 @@ public enum DataType {
 
   ;
 
+  /**
+   * Categorizes a {@link DataType} by its structural shape,
+   * used to dispatch to the correct parsing method.
+   */
   public enum Arity {
-    SINGLE, LIST, LIST_2D, ARRAY
+    /** A single scalar value. */
+    SINGLE,
+    /** A flat {@code List<T>}. */
+    LIST,
+     /** A 2D {@code List<List<T>>}. */
+    LIST_2D,
+    /** A primitive array. */
+    ARRAY,
   };
 
+  /** The structural shape of this data type. */
   public final Arity arity;
+  /** The Java class corresponding to the element type. */
   public final Class<?> clazz;
 
   DataType(Arity arity, Class<?> clazz) {

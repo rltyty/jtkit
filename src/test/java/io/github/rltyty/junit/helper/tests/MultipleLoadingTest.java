@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026-present RLTYTY
+ * Licensed under the MIT License.
+ */
+
 package io.github.rltyty.junit.helper.tests;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,8 +16,8 @@ import io.github.rltyty.jtkit.junit.helper.parser.Scenario;
 public class MultipleLoadingTest extends BaseTest {
   public record Instrument(
       @ParseWith(DataType.STRING) String name,
-      @ParseWith(DataType.STRING) String fame) implements Scenario {
-  }
+      @ParseWith(DataType.STRING) String fame)
+      implements Scenario {}
 
   private static final AtomicInteger ins_num_1 = new AtomicInteger();
   private static final AtomicInteger ins_num_2 = new AtomicInteger();
